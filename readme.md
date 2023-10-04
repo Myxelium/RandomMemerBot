@@ -1,0 +1,15 @@
+# Get Started
+
+run ``npm i`` then ``npm run setup`` insert your token in the .env file in root folder. Then run ``npm start``
+
+
+## what is this!? 
+Bot randomly picks mp3 files from folder and plays them randomly in joined server.
+
+It only joins voice channels that arent empty and it plays a sound with a interval of 10 min to 12 hours. 
+This might be effected by how many servers it has joined.
+
+
+## But why
+
+this is rushed like crazy, did this in 30-40min but should work, for now until discord updates their api and stuff

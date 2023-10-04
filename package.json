@@ -1,0 +1,21 @@
+{
+  "name": "randommemer",
+  "version": "1.0.0",
+  "description": "Discord bot randomly plays sounds",
+  "scripts": {
+    "start": "ts-node bot.ts",
+    "create": "echo TOKEN=MY-API-TOKEN > .env",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.16.0",
+    "@types/node": "^20.8.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "sodium": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
