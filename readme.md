@@ -10,7 +10,7 @@ it only joins voice channels that arent empty and it plays a sound with a interv
 this might be effected by how many servers it has joined.
 
 
-## but why
+## ...
 
 this is rushed like crazy, did this in 30-40min but should work, for now until discord updates their api and stuff
 
