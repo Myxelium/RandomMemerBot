@@ -13,3 +13,8 @@ This might be effected by how many servers it has joined.
 ## But why
 
 this is rushed like crazy, did this in 30-40min but should work, for now until discord updates their api and stuff
+
+
+## misc
+
+inv link: https://discord.com/oauth2/authorize?client_id=[REPLACE_THIS_WITH_YOUR_APPLICATIONID]&scope=bot&permissions=2184391704

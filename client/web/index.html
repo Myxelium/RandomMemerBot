@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <!-- 
+            ugly interface just messing around with new style frameworks every new project or so
+        -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RandomMemer upload sounds</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.8.1/dist/css/foundation.min.css" crossorigin="anonymous">
+    </head>
+
+    <body style="background-color: #333;">
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x align-center-middle" style="height: 100vh;">
+                <div class="cell small-12 medium-6 large-4">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="callout">
+                            <h3>Upload Sound</h3>
+                            <div class="input-group">
+                                <span class="input-group-label">File:</span>
+                                <input class="input-group-field" type="file" id="myFile">
+                            </div>
+                            <button class="button expanded" type="submit">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <script src="client.js"></script>
+    </body>
+</html>
