@@ -17,4 +17,4 @@ this is rushed like crazy, did this in 30-40min but should work, for now until d
 
 ## misc
 
-inv link: https://discord.com/oauth2/authorize?client_id=[REPLACE_THIS_WITH_YOUR_APPLICATIONID]&scope=bot&permissions=2184391704 if you place your token in the .env file, once the bot start youll get the full inv link in the terminal.
+inv link: https://discord.com/oauth2/authorize?client_id=[REPLACE_THIS_WITH_YOUR_APPLICATIONID]&scope=bot&permissions=2184391704 when you place your token in the .env file, once the bot start youll get the full inv link in the terminal.
