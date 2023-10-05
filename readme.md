@@ -4,10 +4,10 @@ run ``npm i`` then ``npm run setup`` insert your token in the .env file in root 
 
 
 ## what is this!? 
-Bot randomly picks mp3 files from folder and plays them randomly in joined server.
+bot randomly picks mp3 files from folder and plays them randomly in joined server.
 
-It only joins voice channels that arent empty and it plays a sound with a interval of 10 min to 12 hours. 
-This might be effected by how many servers it has joined.
+it only joins voice channels that arent empty and it plays a sound with a interval of 10 min to 12 hours. 
+this might be effected by how many servers it has joined.
 
 
 ## but why
