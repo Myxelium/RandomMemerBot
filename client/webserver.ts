@@ -30,6 +30,29 @@ app.post('/upload', upload.single('myFile'), async (req, res) => {
     res.send('File uploaded successfully.');
 });
 
+app.get('/sounds', (_req, res) => {
+    const fs = require('fs');
+    const directoryPath = path.join(__dirname, '../sounds');
+    fs.readdir(directoryPath, function (err: any, files: any[]) {
+        if (err) {
+            return console.log(LoggerColors.Red, 'Unable to scan directory: ' + err);
+        }
+        res.send(files);
+    });
+});
+
+app.delete('/sounds/:filename', (req, res) => {
+    const fs = require('fs');
+    const directoryPath = path.join(__dirname, '../sounds');
+    const filePath = directoryPath + '/' + req.params.filename;
+    fs.unlink(filePath, (err: any) => {
+        if (err) {
+            return console.log(LoggerColors.Red, 'Unable to delete file: ' + err);
+        }
+        res.send('File deleted successfully.');
+    });
+});
+
 app.use(express.static(path.join(__dirname, "web")));
 
 export function startServer() {

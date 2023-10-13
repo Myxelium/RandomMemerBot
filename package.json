@@ -4,7 +4,7 @@
   "description": "Discord bot randomly plays sounds",
   "scripts": {
     "start": "ts-node bot.ts",
-    "create": "echo TOKEN=MY-API-TOKEN > .env",
+    "create": "node -e \"require('fs').writeFileSync('.env', 'TOKEN=MY-API-TOKEN\\nINTERVALMIN_MINUTES=10\\nINTERVALMAX_HOURS=6\\nVOICECHANNELRETRIES=12')\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "SocksOnHead",
@@ -17,11 +17,14 @@
     "dotenv": "~16.3.1",
     "express": "~4.18.2",
     "multer": "~1.4.5-lts.1",
+    "node-schedule": "~2.1.1",
+    "libsodium-wrappers": "~0.7.13",
     "sodium": "~3.0.2",
     "ts-node": "~10.9.1",
     "typescript": "~5.2.2"
   },
   "devDependencies": {
-    "@types/express": "~4.17.18"
+    "@types/express": "~4.17.18",
+    "@types/node-schedule": "^2.1.1"
   }
 }
