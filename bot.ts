@@ -110,9 +110,13 @@ async function joinRandomChannel(retries = 12) {
 
 function scheduleNextJoin(){
     const randomInterval = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-    log(randomInterval);
     
-    schedule.scheduleJob(`*/${randomInterval} * * * *`, function(){
+    log(randomInterval);
+
+    const minutes = randomInterval % 60;
+    const hours = Math.floor(randomInterval / 60);
+
+    schedule.scheduleJob(`${minutes} ${hours == 0 ? '*' : hours } * * *`, function(){
         joinRandomChannel();
     });
 }
@@ -123,12 +127,14 @@ function convertHoursToMinutes(hours: number){
 
 function log(waitTime: number){
     const currentTime = new Date();
-    const nextJoinTime = new Date(currentTime.getTime() + waitTime * 60 * 1000); // Convert waitTime from minutes to milliseconds
-
+    const nextJoinTime = new Date(currentTime.getTime() + waitTime * 60000);
+    const minutes = waitTime % 60;
+    const hours = Math.floor(waitTime / 60);
     console.log(
         LoggerColors.Cyan, `
         Wait time: ${waitTime} minutes,
         Current time: ${currentTime.toLocaleTimeString()}, 
-        Next join time: ${nextJoinTime.toLocaleTimeString()}`
+        Next join time: ${nextJoinTime.toLocaleTimeString()},
+        Cron: ${minutes} ${hours == 0 ? '*' : hours } * * *`
     );
 }
