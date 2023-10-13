@@ -1,6 +1,6 @@
 # get started
 
-run ``npm i`` then ``npm run setup`` insert your token in the .env file in root folder. Then run ``npm start``
+run ``npm i`` then ``npm run create`` insert your token in the .env file in root folder. Then run ``npm start``
 
 
 ## what is this!? 
