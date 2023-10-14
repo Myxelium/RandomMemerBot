@@ -3,6 +3,10 @@ import express from 'express';
 import multer, { diskStorage } from 'multer';
 import path from 'path';
 import { LoggerColors } from '../bot';
+import ytdl from 'ytdl-core';
+import fs from 'fs';
+import bodyParser from 'body-parser';
+import ffmpeg from 'fluent-ffmpeg';
 
 const app = express();
 const storage = diskStorage({
@@ -12,6 +16,7 @@ const storage = diskStorage({
     }
 });
 
+app.use(bodyParser.json());
 
 const upload = multer({ 
     storage: storage,
@@ -20,6 +25,7 @@ const upload = multer({
         if (path.extname(file.originalname) !== '.mp3') {
             return cb(new Error('Only .mp3 files are allowed'));
         }
+        
         cb(null, true);
     }
 });
@@ -30,6 +36,55 @@ app.get('/', (_req, res) => {
 
 app.post('/upload', upload.single('myFile'), async (req, res) => {
     res.send('File uploaded successfully.');
+});
+
+app.post('/upload-youtube', async (req, res) => {
+    const url = req.body.url;
+
+    if (ytdl.validateURL(url)) {
+        const info = await ytdl.getInfo(url);
+        // remove special characters from the title and white spaces
+        const title = info.videoDetails.title.replace(/[^a-zA-Z ]/g, "").replace(/\s+/g, '-').toLowerCase();
+
+        // Create a temporary directory to store the uploaded file so validation can be done
+        const tempDir = fs.mkdtempSync('temp');
+        const outputFilePath = path.resolve(tempDir, Date.now() + '-' + title + '.mp3');
+
+        const videoReadableStream = ytdl(url, { filter: 'audioonly' });
+        const fileWritableStream = fs.createWriteStream(outputFilePath);
+
+        videoReadableStream.pipe(fileWritableStream);
+
+        fileWritableStream.on('finish', () => {
+            ffmpeg.ffprobe(outputFilePath, function(err, metadata) {
+                if (err) {
+                    fs.rmSync(tempDir, { recursive: true, force: true });
+                    return res.status(500).send('Error occurred during processing.');
+                }
+                const duration = metadata.format.duration;
+
+                if (duration == undefined) {
+                    fs.rmSync(tempDir, { recursive: true, force: true });
+                    return res.status(400).send('Something went wrong.');
+                }
+                if (duration > 10) {
+                    fs.rmSync(tempDir, { recursive: true, force: true });
+                    return res.status(400).send('File is longer than 10 seconds.');
+                } else {
+                    // Move the file from the temporary directory to its final destination
+                    const finalFilePath = path.resolve(__dirname, '../sounds/', Date.now() + '-' + title + '.mp3');
+                    fs.renameSync(outputFilePath, finalFilePath);
+
+                    res.send('File uploaded successfully.');
+                }
+
+                // Remove the temporary directory and its contents once done
+                fs.rmSync(tempDir, { recursive: true, force: true });
+            });
+        });
+    } else {
+        res.status(400).send('Invalid url provided.');
+    }
 });
 
 // create a enpoint to return a file from the sounds folder (use the file name) with as little code as possible

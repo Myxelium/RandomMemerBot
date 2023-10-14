@@ -93,39 +93,68 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
 
     var fileInput = document.getElementById('myFile');
     var file = fileInput.files[0];
+    var youtubeLink = document.getElementById('youtubeLink').value;
 
-    var objectURL = URL.createObjectURL(file);
-    var audio = new Audio(objectURL);
+    if (file) {
+        var objectURL = URL.createObjectURL(file);
+        var audio = new Audio(objectURL);
 
-    audio.addEventListener('loadedmetadata', function() {
-        var duration = audio.duration;
-        console.log(duration);
+        audio.addEventListener('loadedmetadata', function() {
+            var duration = audio.duration;
+            console.log(duration);
 
-        if (duration > 10) {
-            alert('File is longer than 10 seconds.');
-            return;
-        }
+            if (duration > 10) {
+                alert('File is longer than 10 seconds.');
+                return;
+            }
 
-        if (file.size > 1024 * 1024) {
-            alert('File is larger than 1MB.');
-            return;
-        }
+            if (file.size > 1024 * 1024) {
+                alert('File is larger than 1MB.');
+                return;
+            }
 
-        if (file.name.split('.').pop().toLowerCase() !== 'mp3') {
-            alert('Only .mp3 files are allowed.');
-            return;
-        }
+            if (file.name.split('.').pop().toLowerCase() !== 'mp3') {
+                alert('Only .mp3 files are allowed.');
+                return;
+            }
 
-        var formData = new FormData();
-        formData.append('myFile', file);
+            var formData = new FormData();
+            formData.append('myFile', file);
 
-        fetch('/upload', {
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                alert('File uploaded successfully.');
+
+                // Call loadFiles again to update the file list
+                loadFiles();
+            })
+            .catch(error => {
+                console.error(error);
+                alert('An error occurred while uploading the file.');
+            });
+        });
+    } else if (youtubeLink) {
+        console.log(youtubeLink);
+        fetch('/upload-youtube', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: youtubeLink }),
         })
         .then(response => response.text())
         .then(data => {
             console.log(data);
+            // if response is not ok, alert
+            if (data !== 'ok') {
+                alert(data);
+                return;
+            }
             alert('File uploaded successfully.');
 
             // Call loadFiles again to update the file list
@@ -135,5 +164,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
             console.error(error);
             alert('An error occurred while uploading the file.');
         });
-    });
+    } else {
+        alert('Please select a file or paste a YouTube link.');
+    }
 });
