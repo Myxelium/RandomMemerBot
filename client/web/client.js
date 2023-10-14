@@ -1,3 +1,11 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelector('#myFile').addEventListener('change', function(e) {
+      var fileName = e.target.files[0].name;
+      var nextSibling = e.target.nextElementSibling
+      nextSibling.innerText = fileName
+    })
+});
+
 function loadNextPlaybackTime() {
     fetch('/nextplaybacktime')
         .then(response => response.text())
@@ -24,20 +32,35 @@ function loadFiles() {
             data.forEach(file => {
                 // Create a new list item
                 const li = document.createElement('li');
-                li.className = 'grid-x';
+                li.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center'
 
                 // Create a div for the file name and add it to the list item
                 const fileNameDiv = document.createElement('div');
-                fileNameDiv.className = 'cell auto';
                 fileNameDiv.textContent = file;
                 li.appendChild(fileNameDiv);
 
-                // Create a div for the trash icon and add it to the list item
-                const trashIconDiv = document.createElement('div');
-                trashIconDiv.className = 'cell shrink';
+                // Create a div for the icons and add it to the list item
+                const iconDiv = document.createElement('div');
+                li.appendChild(iconDiv);
+
+                // Create a div for the play icon and add it to the icon div
+                const playIconDiv = document.createElement('span');
+                playIconDiv.style.cursor = 'pointer';
+                playIconDiv.textContent = '▶️';
+                iconDiv.appendChild(playIconDiv);
+
+                // Attach a click event listener to the play icon div
+                playIconDiv.addEventListener('click', () => {
+                    // Create a new audio object and play the file
+                    let audio = new Audio('/sounds/' + file);
+                    audio.play();
+                });
+
+                // Create a div for the trash icon and add it to the icon div
+                const trashIconDiv = document.createElement('span');
                 trashIconDiv.style.cursor = 'pointer';
                 trashIconDiv.textContent = '🗑️';
-                li.appendChild(trashIconDiv);
+                iconDiv.appendChild(trashIconDiv);
 
                 // Attach a click event listener to the trash icon div
                 trashIconDiv.addEventListener('click', () => {
@@ -59,6 +82,7 @@ function loadFiles() {
         })
         .catch(error => console.error('Error:', error));
 }
+
 
 // Call loadFiles when the script is loaded
 loadFiles();

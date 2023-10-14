@@ -92,6 +92,13 @@ async function joinRandomChannel(retries = 12) {
         await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
         const soundFiles = fileSystem.readdirSync(soundsDir).filter(file => file.endsWith('.mp3'));
         const soundFile = soundsDir + soundFiles[Math.floor(Math.random() * soundFiles.length)];
+
+        if(!soundFile) {
+            console.log(LoggerColors.Red, 'No sound files found');
+            scheduleNextJoin();
+            return;
+        }
+
         const resource = createAudioResource(soundFile);
         const player = createAudioPlayer();
         

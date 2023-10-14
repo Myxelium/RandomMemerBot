@@ -1,49 +1,43 @@
-<html>
-    <head>
-        <!-- 
-            ugly interface just messing around with new style frameworks every new project or so
-        -->
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>RandomMemer upload sounds</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.8.1/dist/css/foundation.min.css" crossorigin="anonymous">
-    </head>
-
-    <body style="background-color: #333;">
-        <div class="grid-container">
-            <img src="logo.svg" alt="Logo" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
-            <div class="grid-x grid-padding-x align-center" style="height: 100vh;">
-                <div class="cell small-12 medium-6 large-4" style="height: 100%">
-                    <div style="position: fixed;">
-                        <form id="uploadForm" enctype="multipart/form-data" >
-                            <div class="callout">
-                                <h3>Upload Sound</h3>
-                                <div class="input-group">
-                                    <span class="input-group-label">File:</span>
-                                    <input class="input-group-field" type="file" id="myFile">
-                                </div>
-                                <button class="button expanded" type="submit">Upload</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RandomMemer upload sounds</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <img src="logo.svg" alt="Logo" class="img-fluid mx-auto d-block mb-5">
+                <form id="uploadForm" enctype="multipart/form-data" class="mb-4 dropzone dz-clickable">
+                    <h3>Upload a sound</h3>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" id="myFile" class="custom-file-input">
+                                <label class="custom-file-label" for="myFile">Choose file</label>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                </form>
 
-                        <div class="callout">
-                            <h3>Info</h3>
-                            <div id="nextPlaybackTime"></div>
-                        </div>
-                    </div>
+                <div id="nextPlaybackTime" class="mb-4">
+                    Endpoint not loading!?
                 </div>
-                
-                <div class="cell small-12 medium-6 large-4">
-                    <div class="callout">
-                        <h3>Uploaded Files</h3>
-                        <div style="min-height:209px;max-height:100vh;overflow: auto;">
-                            <ul id="fileList" class="vertical menu"></ul>
-                        </div>
-                    </div>
+
+                <div>
+                    <h3>Uploaded Files</h3>
+                    <ul id="fileList" class="list-group"></ul>
                 </div>
             </div>
         </div>
-        
-        <script src="client.js"></script>
-    </body>
+    </div>
+
+    <!-- Include Dropzone JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.js"></script>
+    <script src="client.js"></script>
+</body>
 </html>

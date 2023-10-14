@@ -32,6 +32,9 @@ app.post('/upload', upload.single('myFile'), async (req, res) => {
     res.send('File uploaded successfully.');
 });
 
+// create a enpoint to return a file from the sounds folder (use the file name) with as little code as possible
+app.use('/sounds', express.static(path.join(__dirname, '../sounds')));
+
 app.get('/sounds', (_req, res) => {
     const fs = require('fs');
     const directoryPath = path.join(__dirname, '../sounds');
