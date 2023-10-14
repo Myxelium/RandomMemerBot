@@ -1,3 +1,14 @@
+function loadNextPlaybackTime() {
+    fetch('/nextplaybacktime')
+        .then(response => response.text())
+        .then(data => {
+            const nextPlaybackTime = document.getElementById('nextPlaybackTime');
+            nextPlaybackTime.textContent = `Playing next time: ${data}`;
+        }
+    )
+    .catch(error => console.error('Error:', error));
+}
+
 function loadFiles() {
     // Fetch the JSON data from the /sounds endpoint
     fetch('/sounds')
@@ -51,6 +62,7 @@ function loadFiles() {
 
 // Call loadFiles when the script is loaded
 loadFiles();
+loadNextPlaybackTime();
 
 document.getElementById('uploadForm').addEventListener('submit', function(event) {
     event.preventDefault();

@@ -1,3 +1,4 @@
+import { nextPlayBackTime } from './../bot';
 import express from 'express';
 import multer, { diskStorage } from 'multer';
 import path from 'path';
@@ -10,6 +11,7 @@ const storage = diskStorage({
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
+
 
 const upload = multer({ 
     storage: storage,
@@ -39,6 +41,10 @@ app.get('/sounds', (_req, res) => {
         }
         res.send(files);
     });
+});
+
+app.get('/nextplaybacktime', (_req, res) => {
+    res.send(nextPlayBackTime);
 });
 
 app.delete('/sounds/:filename', (req, res) => {

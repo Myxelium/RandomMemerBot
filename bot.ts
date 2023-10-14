@@ -14,6 +14,7 @@ import * as schedule from 'node-schedule';
 
 dotenv.config();
 
+export var nextPlayBackTime: string = '';
 const minTime = parseInt(process.env.INTERVALMIN_MINUTES!, 10); // Minimum interval in minutes
 const maxTime = convertHoursToMinutes(parseInt(process.env.INTERVALMAX_HOURS!, 10)); // Maximum interval in minutes
 const voiceChannelRetries = parseInt(process.env.VOICECHANNELRETRIES!, 10); // Number of retries to find a voice channel with members in it
@@ -113,6 +114,8 @@ function scheduleNextJoin(){
     
     log(randomInterval);
 
+    nextPlayBackTime = new Date(new Date().getTime() + randomInterval * 60000).toLocaleTimeString();
+
     const minutes = randomInterval % 60;
     const hours = Math.floor(randomInterval / 60);
 
@@ -130,6 +133,7 @@ function log(waitTime: number){
     const nextJoinTime = new Date(currentTime.getTime() + waitTime * 60000);
     const minutes = waitTime % 60;
     const hours = Math.floor(waitTime / 60);
+
     console.log(
         LoggerColors.Cyan, `
         Wait time: ${waitTime} minutes,
