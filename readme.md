@@ -1,7 +1,14 @@
+![randommemer discord bot logotype](/client/web/logo.svg)
+
 # get started
+
+install ffmpeg 
+* linux: ``sudo apt install ffmpeg``
+* general install (all OS): [Link to download](https://ffmpeg.org/download.html)
 
 run ``npm i`` then ``npm run create`` insert your token in the .env file in root folder. Then run ``npm start``
 
+on server i run this using [pm2](https://pm2.keymetrics.io/) to manage it.
 
 ## what is this!? 
 bot randomly picks mp3 files from folder and plays them randomly in joined server.

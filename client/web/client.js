@@ -156,8 +156,6 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                 return;
             }
             alert('File uploaded successfully.');
-
-            // Call loadFiles again to update the file list
             loadFiles();
         })
         .catch(error => {
