@@ -122,7 +122,7 @@ app.delete('/sounds/:filename', (req, res) => {
 app.use(express.static(path.join(__dirname, "web")));
 
 export function startServer() {
-    const port = 8080;
+    let port: 80 | 443 = 80;
     let server;
     let ssl: "https" | "http" = "http";
 
@@ -135,6 +135,7 @@ export function startServer() {
         };
         server = https.createServer(options, app);
         ssl = "https";
+        port = 443;
     } catch (error) {
         console.log(LoggerColors.Yellow, 'Could not find SSL certificates, falling back to http.');
         server = app;
