@@ -46,7 +46,7 @@ client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.tag}!`);
 
     joinRandomChannel(voiceChannelRetries);
-    startWebServer();
+    // startWebServer();
 });
   
 /**
