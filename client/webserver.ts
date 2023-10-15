@@ -7,6 +7,8 @@ import ytdl from 'ytdl-core';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import ffmpeg from 'fluent-ffmpeg';
+import https from 'https';
+import ip from 'ip';
 
 const app = express();
 const storage = diskStorage({
@@ -121,7 +123,25 @@ app.use(express.static(path.join(__dirname, "web")));
 
 export function startServer() {
     const port = 8080;
-    app.listen(port, () => {
-        console.log(LoggerColors.Cyan,`Add sounds at http://localhost:${port}, or drop in the sounds folder.`);
+    let server;
+    let ssl: "https" | "http" = "http";
+
+    try {
+        const options = {
+            requestCert: true,
+            rejectUnauthorized: false,
+            key: fs.readFileSync(path.join(__dirname, '/certs/key.pem')),
+            cert: fs.readFileSync(path.join(__dirname, '/certs/cert.pem')),
+        };
+        server = https.createServer(options, app);
+        ssl = "https";
+    } catch (error) {
+        console.log(LoggerColors.Yellow, 'Could not find SSL certificates, falling back to http.');
+        server = app;
+        ssl = "http";
+    }
+
+    server.listen(port, () => {
+        console.log(`Server started at ${ssl}://${ip.address()}:${port}`);
     });
 }
