@@ -121,7 +121,7 @@ function scheduleNextJoin(){
     
     log(randomInterval);
 
-    nextPlayBackTime = new Date(new Date().getTime() + randomInterval * 60000).toLocaleTimeString();
+    nextPlayBackTime = new Date(new Date().getTime() + randomInterval * 60000).toString();
 
     const minutes = randomInterval % 60;
     const hours = Math.floor(randomInterval / 60);
@@ -144,8 +144,8 @@ function log(waitTime: number){
     console.log(
         LoggerColors.Cyan, `
         Wait time: ${waitTime} minutes,
-        Current time: ${currentTime.toLocaleTimeString()}, 
-        Next join time: ${nextJoinTime.toLocaleTimeString()},
+        Current time: ${currentTime.toString()}, 
+        Next join time: ${nextJoinTime.toString()},
         Cron: ${minutes} ${hours == 0 ? '*' : hours } * * *`
     );
 }
