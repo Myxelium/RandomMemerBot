@@ -14,7 +14,7 @@ once you have FFmpeg installed, follow these steps to get the project up and run
 
 1. Run `npm i` in your terminal to install all dependencies.
 2. Run `npm run create` to create the `.env` file in the root folder.
-3. Open the `.env` file and insert your Discord bot token.
+3. Open the `.env` file and insert your [Discord bot token](#how-to-get-discord-token).
 4. Run `npm start` to start the project.
 
 [OPTIONAL]
@@ -33,7 +33,7 @@ VOICECHANNELRETRIES=<number of retries to find a voice channel with members in i
 replace `<your Discord bot token>` with your actual Discord bot token. replace `<minimum interval in minutes>`, `<maximum interval in hours>`, and `<number of retries to find a voice channel with members in it>` with your desired values.
 
 ### How to get discord token
-Helpful links for creating your discord application and finding the token:
+Helpful links for creating your Discord application and finding the token:
 
 [Getting token](https://discordgsm.com/guide/how-to-get-a-discord-bot-token) | [Discord Developer Portal](https://discord.com/developers/docs/getting-started)
 
