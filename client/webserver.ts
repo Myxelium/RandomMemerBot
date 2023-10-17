@@ -32,14 +32,27 @@ const upload = multer({
     }
 });
 
+/**
+ * Returns the index.html file.
+ * @returns index.html - The index.html file.
+ */
 app.get('/', (_req, res) => {
     res.sendFile(path.join(__dirname, 'web/index.html'));
 });
 
+/**
+ * Uploads a file to the sounds folder.
+ * @Body myFile - The file to upload.
+ */
 app.post('/upload', upload.single('myFile'), async (req, res) => {
     res.send('File uploaded successfully.');
 });
 
+/**
+* Uploads a YouTube video as an mp3 file to the sounds folder.
+* The video must be shorter than 10 seconds.
+* @Body url - The YouTube video url.
+*/
 app.post('/upload-youtube', async (req, res) => {
     const url = req.body.url;
 
@@ -89,9 +102,17 @@ app.post('/upload-youtube', async (req, res) => {
     }
 });
 
-// create a enpoint to return a file from the sounds folder (use the file name) with as little code as possible
+/**
+ * Returns a file from the sounds folder by filename
+ * @param filename - The name of the file to return.
+ * @returns mp3 - The requested file.
+ */
 app.use('/sounds', express.static(path.join(__dirname, '../sounds')));
 
+/**
+ * Returns a list of all sound files in the sounds directory.
+ * @returns string[] - An array of all sound files in the sounds directory.
+ */
 app.get('/sounds', (_req, res) => {
     const fs = require('fs');
     const directoryPath = path.join(__dirname, '../sounds');
@@ -103,10 +124,17 @@ app.get('/sounds', (_req, res) => {
     });
 });
 
+/**
+ * Returns the next playback time.
+ * @returns string - The next playback time.
+ */
 app.get('/nextplaybacktime', (_req, res) => {
     res.send(nextPlayBackTime);
 });
 
+/**
+ * Deletes a file from the sounds folder by filename
+ */
 app.delete('/sounds/:filename', (req, res) => {
     const fs = require('fs');
     const directoryPath = path.join(__dirname, '../sounds');
@@ -121,6 +149,10 @@ app.delete('/sounds/:filename', (req, res) => {
 
 app.use(express.static(path.join(__dirname, "web")));
 
+/**
+ * Starts the web server on either http or https protocol based on the availability of SSL certificates.
+ * @returns void
+ */
 export function startServer() {
     let port: 80 | 443 = 80;
     let server;
