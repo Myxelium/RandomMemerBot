@@ -16,7 +16,7 @@ dotenv.config();
 
 export var nextPlayBackTime: string = '';
 const minTime = parseInt(process.env.INTERVALMIN_MINUTES!, 10); // Minimum interval in minutes
-const maxTime = convertHoursToMinutes(parseInt(process.env.INTERVALMAX_HOURS!, 10)); // Maximum interval in minutes
+const maxTime = convertHoursToMinutes(parseFloat(process.env.INTERVALMAX_HOURS!)); // Maximum interval in minutes
 const voiceChannelRetries = parseInt(process.env.VOICECHANNELRETRIES!, 10); // Number of retries to find a voice channel with members in it
 
 const token = process.env.TOKEN;
@@ -46,7 +46,7 @@ client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.tag}!`);
 
     joinRandomChannel(voiceChannelRetries);
-    // startWebServer();
+    startWebServer();
 });
   
 /**
@@ -118,16 +118,21 @@ async function joinRandomChannel(retries = 12) {
 
 function scheduleNextJoin(){
     const randomInterval = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-    
-    log(randomInterval);
-
-    nextPlayBackTime = new Date(new Date().getTime() + randomInterval * 60000).toTimeString();
-
     const minutes = randomInterval % 60;
     const hours = Math.floor(randomInterval / 60);
 
-    schedule.scheduleJob(`${minutes} ${hours == 0 ? '*' : hours } * * *`, function(){
-        joinRandomChannel();
+    schedule.gracefulShutdown().finally(() => {
+        console.log(`${Math.floor(minutes)} ${Math.floor(hours) == 0 ? '*' : Math.floor(hours) } * * *`)
+        let jobname = schedule.scheduleJob(`${Math.floor(minutes)} ${Math.floor(hours) == 0 ? '*' : Math.floor(hours) } * * *`, function(){
+            joinRandomChannel();
+        }).name;
+
+        console.log(schedule.scheduledJobs[jobname].nextInvocation().toLocaleString())
+
+        let nextPlaybackDate = schedule.scheduledJobs[jobname].nextInvocation();
+
+        nextPlayBackTime = dateToString(nextPlaybackDate) ?? '';
+        log(nextPlaybackDate, hours, minutes);
     });
 }
 
@@ -135,17 +140,18 @@ function convertHoursToMinutes(hours: number){
     return hours * 60;
 }
 
-function log(waitTime: number){
+function log(waitTime: Date, preHour: number, preMinute: number){
     const currentTime = new Date();
-    const nextJoinTime = new Date(currentTime.getTime() + waitTime * 60000);
-    const minutes = waitTime % 60;
-    const hours = Math.floor(waitTime / 60);
 
     console.log(
         LoggerColors.Cyan, `
-        Wait time: ${waitTime} minutes,
-        Current time: ${currentTime.toTimeString()}, 
-        Next join time: ${nextJoinTime.toTimeString()},
-        Cron: ${minutes} ${hours == 0 ? '*' : hours } * * *`
+        Wait time: ${(waitTime.getTime() - currentTime.getTime()) / 60000} minutes,
+        Current time: ${dateToString(currentTime)}, 
+        Next join time: ${dateToString(waitTime)},
+        Cron: ${Math.floor(preMinute)} ${Math.floor(preHour) == 0 ? '*' : Math.floor(preHour) } * * *`
     );
+}
+
+function dateToString(date: Date){
+    return date.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' });
 }
