@@ -156,13 +156,13 @@ function getRandomSoundFilePath(): string {
  * Schedules the next join to a random channel. Using a random interval between minTime and maxTime.
  * It clears the previous schedule before scheduling the next join, to avoid multiple schedules.
  * @see minTimeInterval - time in minutes
- * @see maxTimeInterval - time in hours
+ * @see maxTimeInterval - time in hours as minutes
  * @see schedule - node-schedule instance
  */
 function scheduleNextJoin(): void {
     const randomInterval = Math.floor(Math.random() * (maxTimeInterval - minTimeInterval + 1)) + minTimeInterval;
     const minutes = randomInterval % 60;
-    const hours = Math.floor(randomInterval / 60);
+    const hours = Math.floor((randomInterval - minutes) / 60);
 
     schedule.gracefulShutdown().finally(() => {
         const jobName = schedule.scheduleJob(`${Math.floor(minutes)} ${Math.floor(hours) == 0 ? '*' : Math.floor(hours) } * * *`, function(){
