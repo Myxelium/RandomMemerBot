@@ -17,7 +17,7 @@ once you have FFmpeg installed, follow these steps to get the project up and run
 3. Open the `.env` file and insert your [Discord bot token](#how-to-get-discord-token).
 4. Run `npm start` to start the project.
 
-Make sure you have those installed:
+make sure you have those installed:
 - Node.js (v16 or later)
 - npm (v7 or later)
 
