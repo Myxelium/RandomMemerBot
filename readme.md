@@ -47,8 +47,8 @@ once the bot start successfully youll get the full invitation link in the termin
 ## Webpage for managing uploads
 once the project starts it will host a website where the user can access and upload sound clips.
 
-it will run on ssl ports if certificates exists. You can generate certficates using the script located at:
-``./client/certs/create-cert.sh` using git-bash for example.
+it will run on ssl ports if certificates exists. you can generate certficates using the script located at:
+``./client/certs/create-cert.sh` using git-bash for example. this is not mandatory and the server will use http if no certficates exists.
 
 ## Libraries Used
 
