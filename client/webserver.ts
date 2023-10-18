@@ -1,4 +1,4 @@
-import { nextPlayBackTime } from './../bot';
+import { joinRandomChannel, nextPlayBackTime } from './../bot';
 import express from 'express';
 import multer, { diskStorage } from 'multer';
 import path from 'path';
@@ -148,6 +148,11 @@ app.delete('/sounds/:filename', (req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, "web")));
+
+app.get('/join', (_req, res) => {
+    joinRandomChannel();
+    res.send('Joining random channel.');
+});
 
 /**
  * Starts the web server on either http or https protocol based on the availability of SSL certificates.

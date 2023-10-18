@@ -62,7 +62,7 @@ discordClient.on('ready', async () => {
  * @param retries - The number of retries to attempt if no voice channels are found.
  * @returns Promise<void>
  */
-async function joinRandomChannel(retries = 12) {
+export async function joinRandomChannel(retries = 12) {
     if (!discordClient.guilds.cache.size) {
         console.log(LoggerColors.Red, 'No guilds found');
         scheduleNextJoin();
