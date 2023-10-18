@@ -165,7 +165,7 @@ function scheduleNextJoin(): void {
     const hours = Math.floor((randomInterval - minutes) / 60);
 
     schedule.gracefulShutdown().finally(() => {
-        const jobName = schedule.scheduleJob(`${Math.floor(minutes)} ${Math.floor(hours) == 0 ? '*' : Math.floor(hours) } * * *`, function(){
+        const jobName = schedule.scheduleJob(`${minutes} ${hours == 0 ? '*' : hours } * * *`, function(){
             joinRandomChannel();
         }).name;
 
