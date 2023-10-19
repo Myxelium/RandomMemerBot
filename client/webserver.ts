@@ -197,8 +197,7 @@ function generateFileName(name: string) {
         .split(' ')
         .filter(word => /^[a-zA-Z0-9]/.test(word))
         .join(' ')
-        .replace(/\s+/g, '-')
-        .toLowerCase();
+        .replace(/\s+/g, ' ');
 
     return `${formattedName}-${randomHex}.mp3`;
 }
