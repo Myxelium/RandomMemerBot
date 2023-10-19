@@ -63,7 +63,7 @@ app.post('/upload-youtube', async (req, res) => {
 
         // Create a temporary directory to store the uploaded file so validation can be done
         const tempDir = fs.mkdtempSync('temp');
-        const outputFilePath = path.resolve(tempDir, Date.now() + '-' + title + '.mp3');
+        const outputFilePath = path.resolve(tempDir, generateFileName(title));
 
         const videoReadableStream = ytdl(url, { filter: 'audioonly' });
         const fileWritableStream = fs.createWriteStream(outputFilePath);
@@ -87,7 +87,7 @@ app.post('/upload-youtube', async (req, res) => {
                     return res.status(400).send('File is longer than 10 seconds.');
                 } else {
                     // Move the file from the temporary directory to its final destination
-                    const finalFilePath = path.resolve(__dirname, '../sounds/', Date.now() + '-' + title + '.mp3');
+                    const finalFilePath = path.resolve(__dirname, '../sounds/', generateFileName(title));
                     fs.renameSync(outputFilePath, finalFilePath);
 
                     res.send('File uploaded successfully.');
@@ -182,4 +182,21 @@ export function startServer() {
     server.listen(port, () => {
         console.log(`Server started at ${ssl}://${ip.address()}:${port}`);
     });
+}
+
+/**
+ * Generates a random file name based on the provided name.
+ * @param name - The name to generate a file name for.
+ * @returns string - The generated file name.
+ */
+function generateFileName(name: string): string {
+    const genRanHex = [...Array(3)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+
+    const newName = name
+        .replace(/[^a-zA-Z ]/g, "")
+        .replace(/\s+/g, '-')
+        .toLowerCase()
+        .replace(/\(.*?\)/g, '').replace(/#.*?\s/g, '');
+
+    return `${newName}-${genRanHex}.mp3`;
 }
