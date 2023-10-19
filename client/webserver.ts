@@ -14,7 +14,7 @@ const app = express();
 const storage = diskStorage({
     destination: 'sounds/',
     filename: function (_req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
+        cb(null, generateFileName(file.originalname));
     }
 });
 
@@ -189,14 +189,16 @@ export function startServer() {
  * @param name - The name to generate a file name for.
  * @returns string - The generated file name.
  */
-function generateFileName(name: string): string {
-    const genRanHex = [...Array(3)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+function generateFileName(name: string) {
+    const randomHex = [...Array(3)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
-    const newName = name
-        .replace(/[^a-zA-Z ]/g, "")
+    const formattedName = name
+        .replace(/\(.*?\)|\[.*?\]/g, '')
+        .split(' ')
+        .filter(word => /^[a-zA-Z0-9]/.test(word))
+        .join(' ')
         .replace(/\s+/g, '-')
-        .toLowerCase()
-        .replace(/\(.*?\)/g, '').replace(/#.*?\s/g, '');
+        .toLowerCase();
 
-    return `${newName}-${genRanHex}.mp3`;
+    return `${formattedName}-${randomHex}.mp3`;
 }
