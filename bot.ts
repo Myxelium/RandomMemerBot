@@ -14,11 +14,17 @@ import {
     VoiceConnectionStatus, 
     VoiceConnection
 } from '@discordjs/voice';
-import { ChannelType, Client, GatewayIntentBits, GuildBasedChannel } from 'discord.js';
+import { ChannelType, Collection, GuildBasedChannel, Snowflake, VoiceChannel, VoiceState } from 'discord.js';
 import * as dotenv from 'dotenv';
-import * as fileSystem from 'fs';
 import { startServer as startWebServer } from './client/webserver';
 import * as schedule from 'node-schedule';
+import { loadAvoidList } from './helpers/load-avoid-list';
+import { LoggerColors } from './helpers/logger-colors';
+import { getRandomSoundFilePath } from './helpers/get-random-sound-file-path';
+import { logger } from './helpers/logger';
+import { SetupDiscordCLient } from './helpers/setup-discord-client';
+import { convertHoursToMinutes, dateToString } from './helpers/converters';
+import { AvoidList } from './models/avoid-list';
 
 dotenv.config();
 
@@ -26,28 +32,7 @@ export var nextPlayBackTime: string = ''; // Export so it can be used in the web
 const minTimeInterval = parseInt(process.env.INTERVALMIN_MINUTES!, 10); // Minimum interval in minutes.
 const maxTimeInterval = convertHoursToMinutes(parseFloat(process.env.INTERVALMAX_HOURS!)); // Maximum interval in minutes.
 const voiceChannelRetries = parseInt(process.env.VOICECHANNELRETRIES!, 10); // Number of retries to find a voice channel with members in it.
-
-const discordApplicationToken = process.env.TOKEN; // Discord bot token from .env file (required) More info: https://discordgsm.com/guide/how-to-get-a-discord-bot-token
-const soundsDirectory = './sounds/';
-const discordClient = new Client({
-	intents: [
-	    GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildVoiceStates,
-		GatewayIntentBits.GuildIntegrations,
-	],
-});
-
-export class LoggerColors {
-    public static readonly Green: string = "\x1b[32m%s\x1b[0m";
-    public static readonly Yellow: string = "\x1b[33m%s\x1b[0m";
-    public static readonly Cyan: string = "\x1b[36m%s\x1b[0m";
-    public static readonly Red: string = "\x1b[31m%s\x1b[0m";
-    public static readonly Teal: string = "\x1b[35m%s\x1b[0m";
-}
-
-discordClient.login(discordApplicationToken);
+const discordClient = SetupDiscordCLient();
 
 discordClient.on('ready', async () => {
     console.log(LoggerColors.Green, `Add to server by: https://discord.com/oauth2/authorize?client_id=${discordClient.application?.id}&permissions=70379584&scope=bot`);
@@ -56,7 +41,7 @@ discordClient.on('ready', async () => {
     joinRandomChannel(voiceChannelRetries);
     startWebServer();
 });
-  
+
 /**
  * Joins a random voice channel in a random guild and plays a random sound file.
  * @param retries - The number of retries to attempt if no voice channels are found.
@@ -89,28 +74,30 @@ export async function joinRandomChannel(retries = 12) {
     }
     
     const randomlyPickedVoiceChannel = accessableVoiceChannels.random();
-
     try {
         // Join the voice channel
-        const voiceChannelConnection = joinVoiceChannel({
-            channelId: randomlyPickedVoiceChannel!.id,
-            guildId: randomlyPickedVoiceChannel!.guild.id,
-            adapterCreator: randomlyPickedVoiceChannel!.guild.voiceAdapterCreator,
-        });
+        if(isUserFromAvoidListNotInVoiceChannel(randomlyPickedVoiceChannel!)) {
+            
+            const voiceChannelConnection = joinVoiceChannel({
+                channelId: randomlyPickedVoiceChannel!.id,
+                guildId: randomlyPickedVoiceChannel!.guild.id,
+                adapterCreator: randomlyPickedVoiceChannel!.guild.voiceAdapterCreator,
+            });
 
-        await entersState(voiceChannelConnection, VoiceConnectionStatus.Ready, 30e3);
-        const soundFilePath = getRandomSoundFilePath();
+            await entersState(voiceChannelConnection, VoiceConnectionStatus.Ready, 30e3);
+            const soundFilePath = getRandomSoundFilePath();
 
-        if(!soundFilePath) {
-            console.log(LoggerColors.Red, 'No sound files found');
-            scheduleNextJoin();
-            return;
+            if(!soundFilePath) {
+                console.log(LoggerColors.Red, 'No sound files found');
+                scheduleNextJoin();
+                return;
+            }
+
+            await playSoundFile(
+                soundFilePath, 
+                randomlyPickedVoiceChannel, 
+                voiceChannelConnection);
         }
-
-        await playSoundFile(
-            soundFilePath, 
-            randomlyPickedVoiceChannel, 
-            voiceChannelConnection);
 
     } catch (error) {
         console.error(error);
@@ -144,15 +131,6 @@ async function playSoundFile(
 }
 
 /**
- * Returns a random sound file from the sounds directory.
- * @returns string - The path to a random sound file.
- */
-function getRandomSoundFilePath(): string {
-    const allSoundFilesAsArray = fileSystem.readdirSync(soundsDirectory).filter(file => file.endsWith('.mp3'));
-    return soundsDirectory + allSoundFilesAsArray[Math.floor(Math.random() * allSoundFilesAsArray.length)];
-}
-
-/**
  * Schedules the next join to a random channel. Using a random interval between minTime and maxTime.
  * It clears the previous schedule before scheduling the next join, to avoid multiple schedules.
  * @see minTimeInterval - time in minutes
@@ -172,36 +150,34 @@ function scheduleNextJoin(): void {
         let nextPlaybackDate = schedule.scheduledJobs[jobName].nextInvocation();
 
         nextPlayBackTime = dateToString(nextPlaybackDate) ?? '';
-        log(nextPlaybackDate, hours, minutes);
+        logger(nextPlaybackDate, hours, minutes);
     });
 }
 
-function convertHoursToMinutes(hours: number): number {
-    return hours * 60;
-}
 
-/**
- * Logs the wait time, current time, next join time, and cron schedule in the console.
- * @param waitTime - The time to wait until the next join.
- * @param hour - The hour of the cron schedule.
- * @param minute - The minute of the cron schedule.
- */
-function log(
-    waitTime: Date, 
-    hour: number, 
-    minute: number
-){
-    const currentTime = new Date();
+function isUserFromAvoidListNotInVoiceChannel(channel: GuildBasedChannel): boolean {
+    const avoidList: AvoidList = loadAvoidList();
+    const voiceChannel = channel as VoiceChannel;
+    const voiceStates: Collection<Snowflake, VoiceState> = voiceChannel.guild.voiceStates.cache;
+    const membersInVoiceChannel = voiceStates.filter(voiceState => voiceState.channelId === voiceChannel.id);
 
-    console.log(
-        LoggerColors.Cyan, `
-        Wait time: ${(waitTime.getTime() - currentTime.getTime()) / 60000} minutes,
-        Current time: ${dateToString(currentTime)}, 
-        Next join time: ${dateToString(waitTime)},
-        Cron: ${Math.floor(minute)} ${Math.floor(hour) == 0 ? '*' : Math.floor(hour) } * * *`
-    );
-}
+    if(avoidList.avoidUsers.length === 0)
+        return true;
+    
+    if (channel.type !== ChannelType.GuildVoice)
+        return true;
 
-function dateToString(date: Date): string {
-    return date.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' });
+    // Check if any member from the avoid list is in the voice channel
+    for (const voiceState of membersInVoiceChannel.values()) {
+        if(!voiceState.member)
+            continue;
+        
+        if (avoidList.avoidUsers.includes(voiceState.member.user.username)) {
+            console.log(LoggerColors.Yellow, `${voiceState.member.user.username} is in the avoid list, skipping...`);
+            return false;
+        }
+    }
+
+    // No member from the avoid list is in the voice channel
+    return true;
 }

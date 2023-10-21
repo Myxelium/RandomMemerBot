@@ -1,46 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RandomMemer upload sounds</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <img src="logo.svg" alt="Logo" class="img-fluid mx-auto d-block mb-5">
-                <form id="uploadForm" enctype="multipart/form-data" class="mb-4 dropzone dz-clickable">
-                    <h3>Upload a sound</h3>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" id="myFile" class="custom-file-input">
-                                <label class="custom-file-label" for="myFile">Choose file</label>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RandomMemer upload sounds</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="icon" href="assets/favicon.ico" type="image/x-icon"/>
+    </head>
+    <body class="bg-dark text-white">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <img src="assets/logo.svg" alt="Logo" class="img-fluid mx-auto d-block mb-5">
+                    <form id="uploadForm" enctype="multipart/form-data" class="mb-4 dropzone dz-clickable">
+                        <h3>Upload a sound</h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" id="myFile" class="custom-file-input">
+                                    <label class="custom-file-label" for="myFile">Choose file</label>
+                                </div>
+                                <input type="text" id="youtubeLink" class="form-control" placeholder="Paste YouTube link here">
                             </div>
-                            <input type="text" id="youtubeLink" class="form-control" placeholder="Paste YouTube link here">
                         </div>
+                        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                    </form>
+
+                    <button id="joinButton" class="btn btn-info btn-block">Trigger a join</button>
+
+                    <div id="nextPlaybackTime" class="mb-4">
+                        Endpoint not loading!?
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
-                </form>
 
-                <button id="joinButton" class="btn btn-info btn-block">Join</button>
+                    <div>
+                        <h3>Avoid list</h3>
+                        <p>A list of users the bot should never be around</p>
+                        <form id="avoidForm" class="mb-4">
+                            <div class="form-group">
+                                <input type="text" id="avoidUser" class="form-control" placeholder="Enter user to avoid">
+                            </div>
+                            <button type="submit" class="btn btn-info btn-block">Add</button>
+                        </form>
+                        <ul id="avoidList" class="list-group"></ul>
+                    </div>
 
-                <div id="nextPlaybackTime" class="mb-4">
-                    Endpoint not loading!?
-                </div>
+                    <hr class="my-4">
 
-                <div>
-                    <h3>Uploaded Files</h3>
-                    <ul id="fileList" class="list-group"></ul>
+                    <div>
+                        <h3>Uploaded Files</h3>
+                        <ul id="fileList" class="list-group"></ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Include Dropzone JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.js"></script>
-    <script src="client.js"></script>
-</body>
+        <!-- Include Dropzone JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.js"></script>
+        <script src="scripts/avoid-list.js" type="module"></script>
+        <script src="scripts/avoid-form.js" type="module"></script>
+        <script src="scripts/upload.js" type="module"></script>
+        <script src="scripts/file-list.js" type="module"></script>
+        <script src="scripts/index.js" type="module"></script>
+        <script src="scripts/join.js" type="module"></script>
+    </body>
 </html>

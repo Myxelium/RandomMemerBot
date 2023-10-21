@@ -106,6 +106,7 @@ function loadFiles() {
 // Call loadFiles when the script is loaded
 loadFiles();
 loadNextPlaybackTime();
+updateAvoidList();
 
 document.getElementById('uploadForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -185,3 +186,79 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
         alert('Please select a file or paste a YouTube link.');
     }
 });
+
+document.getElementById('avoidForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const user = document.getElementById('avoidUser').value;
+
+    fetch('/avoidlist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user }),
+    })
+    .then(response => response.text())
+    .then((data) => {
+        updateAvoidList();
+        document.getElementById('avoidUser').value = '';
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+document.getElementById('removeUser').addEventListener('click', function() {
+    const user = document.getElementById('avoidUser').value;
+
+    fetch(`/avoidlist/${user}`, {
+        method: 'DELETE',
+    })
+    .then(_ => {
+        updateAvoidList();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+function updateAvoidList() {
+    fetch('/avoidlist')
+    .then(response => response.json())
+    .then(data => {
+        const avoidListElement = document.getElementById('avoidList');
+
+        // Clear the avoid list.
+        avoidListElement.innerHTML = '';
+
+        // Add each user in the avoid list to the UI.
+        data.avoidUsers.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.textContent = user;
+            listItem.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+
+            // Add a button to remove the user from the avoid list.
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.className = 'btn btn-success';
+            removeButton.addEventListener('click', function() {
+                fetch(`/avoidlist/${user}`, {
+                    method: 'DELETE',
+                })
+                .then(_ => {
+                    updateAvoidList();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+
+            listItem.appendChild(removeButton);
+            avoidListElement.appendChild(listItem);
+        });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
