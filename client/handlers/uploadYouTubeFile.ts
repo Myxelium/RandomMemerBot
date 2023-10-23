@@ -39,7 +39,7 @@ export async function UploadYouTubeFile(response: express.Response, request: exp
                     fileSystem.rmSync(tempDir, { recursive: true, force: true });
                     return response.status(400).send('Something went wrong.');
                 }
-                if (duration > 10) {
+                if (duration >= 10) {
                     fileSystem.rmSync(tempDir, { recursive: true, force: true });
                     return response.status(400).send('File is longer than 10 seconds.');
                 } else {
