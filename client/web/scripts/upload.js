@@ -33,7 +33,7 @@ document.getElementById('uploadForm').addEventListener('submit', function (event
             var duration = audio.duration;
             console.log(duration);
 
-            if (duration > 10) {
+            if (duration >= 10) {
                 alert('File is longer than 10 seconds.');
                 return;
             }
