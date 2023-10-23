@@ -22,6 +22,7 @@ export function loadFiles() {
 
                 // Create a div for the icons and add it to the list item
                 const iconDiv = document.createElement('div');
+                iconDiv.className = 'd-flex';
                 li.appendChild(iconDiv);
 
                 // Create a div for the play icon and add it to the icon div
