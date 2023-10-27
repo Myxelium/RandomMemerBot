@@ -1,7 +1,7 @@
 ![randommemer discord bot logotype](/client/web/assets/logo.svg)
 
 # What is this!? 
-this is a discord bot that joins a random voice channel in a random guild and plays a random sound file (mp3). it uses the `@discordjs/voice` library for voice connections and the `node-schedule` library for scheduling the next join. the bot also starts a web server using the `startserver` function from the `webserver` module.
+this is a discord bot that joins a random voice channel in a random guild and plays a random sound file (mp3) at a random time. it uses the `@discordjs/voice` library for voice connections and the `node-schedule` library for scheduling the next join. the bot also starts a web server using the `startserver` function from the `webserver` module.
 
 ## Get started
 
