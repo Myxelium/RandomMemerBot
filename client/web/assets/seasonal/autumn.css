@@ -1,0 +1,9 @@
+.autumn {
+    background-image: url("autumn.jpg");
+    background-size: cover;
+}
+
+.bg-dark {
+    background-color: #343a40eb!important;
+    border-radius: 4px;
+}

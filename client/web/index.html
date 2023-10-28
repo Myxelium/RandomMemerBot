@@ -9,9 +9,9 @@
     </head>
     <body class="bg-dark text-white">
         <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <img src="assets/logo.svg" alt="Logo" class="img-fluid mx-auto d-block mb-5">
+            <div class="justify-content-center">
+                <img id="logotype" src="assets/logo.svg" alt="Logo" class="col-md-6 img-fluid mx-auto d-block mb-5">
+                <div class="col-md-6 bg-dark pt-3 mx-auto">
                     <form id="uploadForm" enctype="multipart/form-data" class="mb-4 dropzone dz-clickable">
                         <h3>Upload a sound</h3>
                         <div class="form-group">
@@ -31,6 +31,8 @@
                     <div id="nextPlaybackTime" class="mb-4">
                         Endpoint not loading!?
                     </div>
+
+                    <hr class="my-4">
 
                     <div>
                         <h3>Avoid list</h3>
@@ -68,5 +70,6 @@
         <script src="scripts/file-list.js" type="module"></script>
         <script src="scripts/index.js" type="module"></script>
         <script src="scripts/join.js" type="module"></script>
+        <script src="scripts/seasonal-theme.js"></script>
     </body>
 </html>
