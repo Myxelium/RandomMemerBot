@@ -8,4 +8,5 @@
 .bg-dark {
     background-color: #343a40eb!important;
     border-radius: 4px;
+    background-blend-mode: difference;
 }
