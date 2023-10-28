@@ -1,7 +1,8 @@
 .autumn {
     background-image: url("autumn.jpg");
-    background-size: contain;
     background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .bg-dark {
