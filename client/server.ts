@@ -1,7 +1,7 @@
 import https from 'https';
 import fs from 'fs';
 import path from 'path';
-import { LoggerColors } from '../helpers/logger-colors';
+import { LoggerColors } from '../helpers/loggerColors';
 import ip from 'ip';
 import { Express } from 'express';
 

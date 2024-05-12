@@ -1,5 +1,5 @@
 import { dateToString } from "./converters";
-import { LoggerColors } from "./logger-colors";
+import { LoggerColors } from "./loggerColors";
 
 /**
  * Logs the wait time, current time, next join time, and cron schedule in the console.

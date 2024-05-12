@@ -3,7 +3,7 @@ import path from 'path';
 import ytdl from 'ytdl-core';
 import * as fileSystem from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
-import { generateFileName } from '../../helpers/generate-file-name';
+import { generateFileName } from '../../helpers/generateFileName';
 
 /**
 * Uploads a YouTube video as an mp3 file to the sounds folder.

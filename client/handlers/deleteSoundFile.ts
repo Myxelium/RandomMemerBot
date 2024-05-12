@@ -1,7 +1,8 @@
 import express from 'express';
 import path from 'path';
 import * as fileSystem from 'fs';
-import { LoggerColors } from '../../helpers/logger-colors';
+import { LoggerColors } from '../../helpers/loggerColors';
+import { DeleteSoundFromDatabase } from '../data/deleteSound';
 
 /**
  * Deletes a file from the sounds folder by filename
@@ -16,4 +17,6 @@ export function DeleteSoundFile(response: express.Response, request: express.Req
         }
         response.send('File deleted successfully.');
     });
+
+    DeleteSoundFromDatabase(request.params.filename);
 }

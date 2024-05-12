@@ -1,6 +1,6 @@
 import express from 'express';
 import fs from 'fs';
-import { loadAvoidList } from '../../helpers/load-avoid-list';
+import { loadAvoidList } from '../../helpers/loadAvoidList';
 
 /**
  * Removes a user from the avoid list.

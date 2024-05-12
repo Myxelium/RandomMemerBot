@@ -1,6 +1,6 @@
 import * as fileSystem from 'fs';
 import express from 'express';
-import { loadAvoidList } from '../../helpers/load-avoid-list';
+import { loadAvoidList } from '../../helpers/loadAvoidList';
 
 /**
  * Adds a user to the avoid list.

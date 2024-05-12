@@ -17,14 +17,15 @@ import {
 import { ChannelType, Collection, GuildBasedChannel, Snowflake, VoiceChannel, VoiceState } from 'discord.js';
 import * as dotenv from 'dotenv';
 import * as schedule from 'node-schedule';
-import { loadAvoidList } from './helpers/load-avoid-list';
-import { LoggerColors } from './helpers/logger-colors';
-import { getRandomSoundFilePath } from './helpers/get-random-sound-file-path';
+import { loadAvoidList } from './helpers/loadAvoidList';
+import { LoggerColors } from './helpers/loggerColors';
+import { getRandomSoundFilePath } from './helpers/getRandomSoundFilePath';
 import { logger } from './helpers/logger';
-import { SetupDiscordCLient } from './helpers/setup-discord-client';
+import { SetupDiscordCLient } from './helpers/setupDiscordClient';
 import { convertHoursToMinutes, dateToString } from './helpers/converters';
 import { AvoidList } from './models/avoid-list';
 import { runServer } from './client/router';
+import { startDatabase } from './client/database';
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ discordClient.on('ready', async () => {
 
     joinRandomChannel(voiceChannelRetries);
     runServer();
+    startDatabase();
 });
 
 /**

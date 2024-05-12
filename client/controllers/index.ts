@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
-import { Handlers } from "../handlers/index";
+import { AddUserToAvoidList, DeleteUserFromAvoidList, JoinChannel } from "../handlers/index";
 import { nextPlayBackTime } from '../../bot';
-import { loadAvoidList } from '../../helpers/load-avoid-list';
+import { loadAvoidList } from '../../helpers/loadAvoidList';
 
 const router = express.Router();
 
@@ -27,15 +27,15 @@ router.get('/avoidlist', (_req, res) => {
 });
 
 router.post('/avoidlist', (req, res) => {
-    Handlers.AddUserToAvoidList(res, req);
+    AddUserToAvoidList(res, req);
 });
 
 router.delete('/avoidlist/:user', (req, res) => {
-    Handlers.DeleteUserFromAvoidList(res, req);
+    DeleteUserFromAvoidList(res, req);
 });
 
 router.get('/join', (_req, res) => {
-    Handlers.JoinChannel(res);
+    JoinChannel(res);
 });
 
 router.use(express.static(path.join(__dirname, "../web")));

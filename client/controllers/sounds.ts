@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'path';
-import { Handlers } from "../handlers/index";
+import { DeleteSoundFile, GetSoundFiles } from "../handlers/index";
 
 const router = express.Router();
 
 router.delete('/sounds/:filename', (_req, res) => {
-    Handlers.DeleteSoundFile(res, _req);
+    DeleteSoundFile(res, _req);
 });
 
 /**
@@ -15,8 +15,6 @@ router.delete('/sounds/:filename', (_req, res) => {
  */
 router.use('/sounds', express.static(path.join(__dirname, '../../sounds')));
 
-router.get('/sounds', (_req, res: express.Response) => {
-    return Handlers.GetSoundFiles(res);
-});
+router.get('/sounds', (_req, res: express.Response) => GetSoundFiles(res));
 
 export default router;

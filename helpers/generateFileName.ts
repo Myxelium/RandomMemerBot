@@ -14,5 +14,5 @@ export function generateFileName(name: string): string {
         .replace(/\s+/g, ' ')
         .replace('.mp3', '');
 
-    return `${formattedName}-${randomHex}.mp3`;
+    return `${formattedName}-${randomHex}.mp3`
 }
