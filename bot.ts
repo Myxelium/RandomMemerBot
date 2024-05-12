@@ -16,7 +16,6 @@ import {
 } from '@discordjs/voice';
 import { ChannelType, Collection, GuildBasedChannel, Snowflake, VoiceChannel, VoiceState } from 'discord.js';
 import * as dotenv from 'dotenv';
-import { startServer as startWebServer } from './client/webserver';
 import * as schedule from 'node-schedule';
 import { loadAvoidList } from './helpers/load-avoid-list';
 import { LoggerColors } from './helpers/logger-colors';
@@ -25,10 +24,11 @@ import { logger } from './helpers/logger';
 import { SetupDiscordCLient } from './helpers/setup-discord-client';
 import { convertHoursToMinutes, dateToString } from './helpers/converters';
 import { AvoidList } from './models/avoid-list';
+import { runServer } from './client/router';
 
 dotenv.config();
 
-export var nextPlayBackTime: string = ''; // Export so it can be used in the webserver module aswell.
+export var nextPlayBackTime: string = 'Never played'; // Export so it can be used in the webserver module aswell.
 const minTimeInterval = parseInt(process.env.INTERVALMIN_MINUTES!, 10); // Minimum interval in minutes.
 const maxTimeInterval = convertHoursToMinutes(parseFloat(process.env.INTERVALMAX_HOURS!)); // Maximum interval in minutes.
 const voiceChannelRetries = parseInt(process.env.VOICECHANNELRETRIES!, 10); // Number of retries to find a voice channel with members in it.
@@ -39,7 +39,7 @@ discordClient.on('ready', async () => {
     console.log(`Logged in as ${discordClient.user?.tag}!`);
 
     joinRandomChannel(voiceChannelRetries);
-    startWebServer();
+    runServer();
 });
 
 /**
