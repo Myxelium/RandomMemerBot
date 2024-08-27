@@ -6,11 +6,14 @@ import fs from 'fs';
 import bodyParser from 'body-parser';
 import https from 'https';
 import ip from 'ip';
+import * as dotenv from 'dotenv';
 
 import { Handlers } from "./handlers/index"
 import { loadAvoidList } from '../helpers/load-avoid-list';
 import { LoggerColors } from '../helpers/logger-colors';
 import { generateFileName } from '../helpers/generate-file-name';
+
+dotenv.config();
 
 const app = express();
 const storage = diskStorage({
@@ -100,7 +103,7 @@ app.get('/avoidlist', (_req, res) => {
  * @returns void
  */
 export function startServer() {
-    let port: 80 | 443 = 80;
+    let port: number = 80;
     let server;
     let ssl: "https" | "http" = "http";
 
@@ -111,6 +114,7 @@ export function startServer() {
             key: fs.readFileSync(path.join(__dirname, '/certs/key.pem')),
             cert: fs.readFileSync(path.join(__dirname, '/certs/cert.pem')),
         };
+        
         server = https.createServer(options, app);
         ssl = "https";
         port = 443;
@@ -118,6 +122,10 @@ export function startServer() {
         console.log(LoggerColors.Yellow, 'Could not find SSL certificates, falling back to http.');
         server = app;
         ssl = "http";
+    }
+
+    if (process.env.WEBPORT) {
+        port = parseInt(process.env.WEBPORT, 10);
     }
 
     server.listen(port, () => {
