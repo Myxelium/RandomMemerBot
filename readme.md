@@ -32,6 +32,7 @@ TOKEN=<your Discord bot token>
 INTERVALMIN_MINUTES=<minimum interval in minutes>
 INTERVALMAX_HOURS=<maximum interval in hours>
 VOICECHANNELRETRIES=<number of retries to find a voice channel with members in it>
+WEBPORT=<The port you want to use for the webserver, (Optional)>
 ```
 
 replace `<your Discord bot token>` with your actual Discord bot token. replace `<minimum interval in minutes>`, `<maximum interval in hours>`, and `<number of retries to find a voice channel with members in it>` with your desired values.
