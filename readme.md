@@ -66,4 +66,4 @@ this bot uses the following libraries:
 if you'd like to contribute to this project, please fork the repository and create a pull request with your changes.
 
 ### Other
-  [![HitCount](https://hits.dwyl.com/myxelium/RandomMemerBot.svg?style=flat&show=unique)](http://hits.dwyl.com/myxelium/RandomMemerBot)
+    [![HitCount](https://hits.dwyl.com/Myxelium/{project}.svg?style=flat-square)](http://hits.dwyl.com/Myxelium/{project})
